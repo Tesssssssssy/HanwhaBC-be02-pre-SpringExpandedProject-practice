@@ -19,5 +19,4 @@ public class EmailVerify {
 
     private String email;
     private String token;
-    private String jwt;
 }

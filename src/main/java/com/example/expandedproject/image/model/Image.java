@@ -1,6 +1,5 @@
-package com.example.expandedproject.cart.model;
+package com.example.expandedproject.image.model;
 
-import com.example.expandedproject.member.model.Member;
 import com.example.expandedproject.product.model.Product;
 import lombok.*;
 
@@ -8,23 +7,19 @@ import javax.persistence.*;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Setter
 @Builder
-public class Cart {
+public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
 
+    @Column(length = 400)
+    private String img;
 
-    @ManyToOne
-    @JoinColumn(name = "Member_id")
-    private Member member;
-
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Product_id")
     private Product product;
-
-    Integer amount;
 }

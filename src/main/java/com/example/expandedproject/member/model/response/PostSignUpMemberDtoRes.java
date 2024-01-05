@@ -1,17 +1,20 @@
 package com.example.expandedproject.member.model.response;
 
-import com.example.expandedproject.member.model.Member;
 import lombok.*;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
+@Data
 public class PostSignUpMemberDtoRes {
-    private Long id;
+    /*
+    private Long idx;
     private String email;
     private String nickname;
     private String token;
     private String jwt;
+    */
+    private Boolean isSuccess;
+    private Integer code;
+    private String message;
+    private MemberSignUpResult result;
+    private Boolean success;
 }

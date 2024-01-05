@@ -19,7 +19,7 @@ public class ImageUtils {
         String str = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
 
         String folderPath = str;
-        String type = "user";
+        String type = "member";
         String uuid = UUID.randomUUID().toString();
 
         return type + "/" + folderPath + "/" + uuid + "_" + originalName;

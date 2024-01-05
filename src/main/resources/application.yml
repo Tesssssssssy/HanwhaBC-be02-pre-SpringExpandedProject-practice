@@ -7,7 +7,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true
@@ -18,7 +18,7 @@ spring:
       matching-strategy: ant_path_matcher
 
   mail:
-    host: smtp.gmail.com
+    host: ${MAIL_HOST}
     port: ${MAIL_PORT}
     username: ${MAIL_USERNAME}
     password: ${MAIL_PASSWORD}
@@ -41,7 +41,7 @@ logging:
 jwt:
   secret-key: ${JWT_SECRET_KEY}
   token:
-    expired-time-ms: 60000
+    expired-time-ms: ${JWT_EXPIRED_TIME}
 
 cloud:
   aws:

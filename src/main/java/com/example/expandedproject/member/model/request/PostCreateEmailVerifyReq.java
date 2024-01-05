@@ -1,14 +1,9 @@
 package com.example.expandedproject.member.model.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
-@AllArgsConstructor
 @Builder
+@Data
 public class PostCreateEmailVerifyReq {
     private String email;
     private String token;

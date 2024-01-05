@@ -5,19 +5,16 @@ import lombok.*;
 
 import java.util.Date;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
+@Data
 public class PutUpdateMemberDtoRes {
-    private Long id;
+    private Long idx;
     private String email;
     private String nickname;
 
     public static PutUpdateMemberDtoRes toDto(Member member) {
         return PutUpdateMemberDtoRes.builder()
-                .id(member.getId())
+                .idx(member.getId())
                 .email(member.getEmail())
                 .nickname(member.getNickname())
                 .build();
