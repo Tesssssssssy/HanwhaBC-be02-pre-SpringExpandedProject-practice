@@ -1,76 +1,74 @@
 # 결과
 
-- 초기 화면
+### 초기 화면
+![Untitled](https://github.com/Tesssssssssy/HanwhaBC-be02-pre-SpringExpandedProject-practice/assets/105422037/de54454f-f952-4a73-80d3-583b6059b440)
+
+<br>
     
-    ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/ab957db7-73a4-4aef-9b1b-7b5310754608/3010a5fc-b129-4743-936c-6efad225254f/Untitled.png)
+### 회원 가입
+![Untitled (1)](https://github.com/Tesssssssssy/HanwhaBC-be02-pre-SpringExpandedProject-practice/assets/105422037/b06d4e9a-dd7e-4d68-b2b6-7e4b907b9e0c)
     
-- 회원 가입
+![Untitled (2)](https://github.com/Tesssssssssy/HanwhaBC-be02-pre-SpringExpandedProject-practice/assets/105422037/abf80e7d-959f-4a20-ad40-a9d31f356bda)
     
-    ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/ab957db7-73a4-4aef-9b1b-7b5310754608/81b625b4-30a0-49b7-890a-277ad3fa5bef/Untitled.png)
+이메일 인증을 하지 않았다는 예외 처리를 했기 때문에 /emailconfirm 페이지로
+이동하지 않고 예외 처리.    
+google email 인증 후
     
-    ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/ab957db7-73a4-4aef-9b1b-7b5310754608/31dd782b-8a4e-47ab-9600-2576eb0c56ba/Untitled.png)
+![Untitled (4)](https://github.com/Tesssssssssy/HanwhaBC-be02-pre-SpringExpandedProject-practice/assets/105422037/58be8091-b8ae-4102-90fb-f515e166a4f0)
     
-    이메일 인증을 하지 않았다는 예외 처리를 했기 때문에 /emailconfirm 페이지로
+회원 가입 완료 및 자동 로그인 <br>
+JWT token도 잘 도착한 모습 확인.
     
-    이동하지 않고 예외 처리.
+![Untitled (5)](https://github.com/Tesssssssssy/HanwhaBC-be02-pre-SpringExpandedProject-practice/assets/105422037/e3b42a69-668b-4bc9-9ad3-3292f6d31d73)
     
-    ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/ab957db7-73a4-4aef-9b1b-7b5310754608/b9722608-f764-4b3d-ae68-4cc842a0e621/Untitled.png)
+DB에 저장된 모습 확인. 
+
+<br>
     
-    google email 인증
+### 상품 등록
+![Untitled (6)](https://github.com/Tesssssssssy/HanwhaBC-be02-pre-SpringExpandedProject-practice/assets/105422037/09d46095-6520-4a8f-b22f-f42dab4b000c)
     
-    ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/ab957db7-73a4-4aef-9b1b-7b5310754608/d028b547-40aa-4c84-8d57-e24b00c45dd1/Untitled.png)
+![Untitled (7)](https://github.com/Tesssssssssy/HanwhaBC-be02-pre-SpringExpandedProject-practice/assets/105422037/f45c04ab-5b8e-4079-ba47-7ca5977826a5)
     
-    회원 가입 완료 및 자동 로그인
-    + JWT token도 잘 도착한 모습 확인.
+로그인 되어 있는 상태이고 token도 있으므로 상품 등록 정상 접속 
     
-    ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/ab957db7-73a4-4aef-9b1b-7b5310754608/e188f410-ac53-44cc-8f04-4d4b0a8974e8/Untitled.png)
+![Untitled (8)](https://github.com/Tesssssssssy/HanwhaBC-be02-pre-SpringExpandedProject-practice/assets/105422037/dcec3f1f-8ba6-4f76-94f7-187965513890)
     
-    DB에 저장된 모습 확인. 
+상품이 정상적으로 등록된 모습 확인.
     
-- 상품 등록
+사진 2개 모두 정상적으로 업로드. 
     
-    ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/ab957db7-73a4-4aef-9b1b-7b5310754608/1b074c42-c05b-43d2-b2dc-e0eec5e8fb6e/Untitled.png)
+![Untitled (9)](https://github.com/Tesssssssssy/HanwhaBC-be02-pre-SpringExpandedProject-practice/assets/105422037/55d2d2a4-1980-4218-8a3b-d01ecd3fb7bb)
     
-    ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/ab957db7-73a4-4aef-9b1b-7b5310754608/c2fe98df-4866-469e-a360-6b06a45cfee8/Untitled.png)
+![Untitled (10)](https://github.com/Tesssssssssy/HanwhaBC-be02-pre-SpringExpandedProject-practice/assets/105422037/829ac640-8519-43ce-a829-3cfbd2a90928)
     
-    로그인 되어 있는 상태이고 token도 있으므로 상품 등록 정상 접속 
+![Untitled (11)](https://github.com/Tesssssssssy/HanwhaBC-be02-pre-SpringExpandedProject-practice/assets/105422037/13b8d451-8ea8-4ca7-afbf-028969f4ba8e)
     
-    ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/ab957db7-73a4-4aef-9b1b-7b5310754608/469195a2-2616-463e-9675-6ac77c5a8501/Untitled.png)
+메인 페이지에서 백엔드의 /product/list 메소드가 실행되고
     
-    상품이 정상적으로 등록된 모습 확인.
+등록한 상품이 response에 잘 오고 화면에도 잘 출력되는 모습 확인.
     
-    사진 2개 모두 정상적으로 업로드. 
+저장된 사진 중 첫 번째 사진이 미리 보기 사진으로 잘 출력된다. 
     
-    ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/ab957db7-73a4-4aef-9b1b-7b5310754608/0376d06e-e913-4603-8063-9fb9bba1a7ab/Untitled.png)
+![Untitled (12)](https://github.com/Tesssssssssy/HanwhaBC-be02-pre-SpringExpandedProject-practice/assets/105422037/e735bd54-392e-451a-9876-4014387051f0)
     
-    ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/ab957db7-73a4-4aef-9b1b-7b5310754608/319e5003-cd2f-4326-acdb-948c8c961735/Untitled.png)
+AWS S3에 지정한 위치로 잘 저장되는 모습 확인.
+
+<br>
     
-    ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/ab957db7-73a4-4aef-9b1b-7b5310754608/2941c33c-51de-4fb0-9cd1-860908b98411/Untitled.png)
+### 장바구니
+![Untitled (13)](https://github.com/Tesssssssssy/HanwhaBC-be02-pre-SpringExpandedProject-practice/assets/105422037/b6547103-9fa4-408c-8eaf-66f1ade6aa4b)
     
-    메인 페이지에서 백엔드의 /product/list 메소드가 실행되고
+장바구니 추가 
     
-    등록한 상품이 response에 잘 오고 화면에도 잘 출력되는 모습 확인.
+![Untitled (14)](https://github.com/Tesssssssssy/HanwhaBC-be02-pre-SpringExpandedProject-practice/assets/105422037/5e21c012-3498-4976-b710-53b4418ad523)
     
-    저장된 사진 중 첫 번째 사진이 미리 보기 사진으로 잘 출력된다. 
+장바구니에 잘 추가된 모습 확인.
     
-    ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/ab957db7-73a4-4aef-9b1b-7b5310754608/e0ca1868-ea88-46de-ab97-0256c95e8eb2/Untitled.png)
+그리고 이미지가 보이지 않는 건 프론트에서 구현이 되지 않아서 그렇다. 
     
-    AWS S3에 지정한 위치로 잘 저장되는 모습 확인.
+![Untitled (15)](https://github.com/Tesssssssssy/HanwhaBC-be02-pre-SpringExpandedProject-practice/assets/105422037/6f6271ac-4a1a-4a6d-88ce-f4c983641b05)
     
-- 장바구니
+![Untitled (16)](https://github.com/Tesssssssssy/HanwhaBC-be02-pre-SpringExpandedProject-practice/assets/105422037/65044174-75c4-498f-966f-9f17a026f773)
     
-    ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/ab957db7-73a4-4aef-9b1b-7b5310754608/7cc31cc8-c48e-484c-b7ae-8246b363115e/Untitled.png)
-    
-    장바구니 추가 
-    
-    ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/ab957db7-73a4-4aef-9b1b-7b5310754608/958a0722-2d96-43e2-8a49-cea29e34a57b/Untitled.png)
-    
-    장바구니에 잘 추가된 모습 확인.
-    
-    그리고 이미지가 보이지 않는 건 프론트에서 구현이 되지 않아서 그렇다. 
-    
-    ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/ab957db7-73a4-4aef-9b1b-7b5310754608/2d41cb8d-0d78-45fb-8ca8-a723f45bb53f/Untitled.png)
-    
-    ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/ab957db7-73a4-4aef-9b1b-7b5310754608/637d404f-e14b-4eef-bf02-f762540f688e/Untitled.png)
-    
-    그리고 아직 구현은 되지 않았지만 결제 API까지 잘 실행되는 모습 확인.
+그리고 아직 구현은 되지 않았지만 결제 API까지 잘 실행되는 모습 확인.
