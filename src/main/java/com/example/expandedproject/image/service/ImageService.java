@@ -21,7 +21,7 @@ public class ImageService {
             savePath = s3Service.uploadFile(image, savePath);
 
             Image img = Image.builder()
-                    .img(savePath)
+                    .filename(savePath)
                     .product(Product.builder().id(id).build())
                     .build();
 

@@ -35,10 +35,13 @@ public class MemberService{
     private final EmailVerifyService emailVerifyService;
     private final AuthenticationManager authenticationManager;
 
-
     @Value("${jwt.secret-key}")
     private String secretKey;
 
+    @Value("${message.email.from}")
+    private String originEmail;
+
+    // Member 일반 회원가입 메소드
     public PostSignUpMemberDtoRes signUpMember(PostSignUpMemberReq request) {
         if (!memberRepository.findByEmail(request.getEmail()).isPresent()) {
             Member member = Member.builder()
@@ -84,17 +87,15 @@ public class MemberService{
     }
 
 
-    /**
-     *  이메일 인증 로직을 따로 메소드로 분리
-     */
+    // 이메일 인증 로직을 따로 메소드로 분리
     public void sendEmail(Long id, String email, String nickname) {
         String token = UUID.randomUUID().toString();
 
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("ewoo9762@gmail.com");
+        message.setFrom(originEmail);
         message.setTo(email);
         message.setSentDate(new Date(System.currentTimeMillis()));
-        message.setSubject("[심마켓] 이메일 인증");
+        message.setSubject("[LTW] 이메일 인증");
         message.setText("http://localhost:8080/member/confirm?email="
                 + email
                 + "&token=" + token
@@ -105,6 +106,8 @@ public class MemberService{
         emailVerifyService.create(email, token);
     }
 
+
+    // Member 판매자 회원가입 메소드
     public PostSignUpMemberDtoRes signUpSeller(PostSignUpMemberReq request) {
         if (!memberRepository.findByEmail(request.getEmail()).isPresent()) {
             Member member = Member.builder()
@@ -141,15 +144,7 @@ public class MemberService{
     }
 
 
-    public Member getMemberByEmail(String email) {
-        Optional<Member> result = memberRepository.findByEmail(email);
-        if (result.isPresent()) {
-            return result.get();
-        }
-        return null;
-    }
-
-
+    // Member Login 메소드
     public String login(PostMemberLoginReq req) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(req.getUsername(), req.getPassword()));
@@ -172,9 +167,7 @@ public class MemberService{
     }
 
 
-    /**
-     *  이메일 인증을 한 유저의 status를 변경하기 위한 메소드
-     */
+    // 이메일 인증을 한 유저의 status를 변경하기 위한 메소드
     public void updateMemberStatus(String email) {
         Optional<Member> result = memberRepository.findByEmail(email);
         if(result.isPresent()) {
@@ -185,6 +178,7 @@ public class MemberService{
     }
 
 
+    // 회원가입 시 이메일 중복 확인
     public Boolean checkEmail(String email) {
         Optional<Member> result = memberRepository.findByEmail(email);
         if (result.isPresent()) {
@@ -193,56 +187,4 @@ public class MemberService{
             return false;
         }
     }
-
-
-// -----------------------------------------------------------------------------------------------------------------
-
-
-
-
-    public GetFindMemberRes findMemberById(Long userId) {
-        Optional<Member> result = memberRepository.findById(userId);
-        if (result.isPresent()) {
-            Member member = result.get();
-
-            return GetFindMemberRes.toDto(member);
-        }
-        return null;
-    }
-
-
-    public List<GetFindMemberRes> findMemberList() {
-        List<Member> members = memberRepository.findAll();
-        List<GetFindMemberRes> userList = new ArrayList<>();
-
-        for (Member member : members) {
-            GetFindMemberRes res = GetFindMemberRes.toDto(member);
-            userList.add(res);
-        }
-        return userList;
-    }
-
-
-    public PutUpdateMemberDtoRes updateMember(PutUpdateMemberReq req, Long userId) {
-        Optional<Member> result = memberRepository.findById(userId);
-        if (result.isPresent()) {
-            Member member = result.get();
-
-            member.setPassword(req.getPassword());
-            member.setNickname(req.getNickname());
-
-            member = memberRepository.save(member);
-
-            PutUpdateMemberDtoRes res = PutUpdateMemberDtoRes.toDto(member);
-            return res;
-        }
-        return null;
-    }
-
-
-    public void deleteMember(Long userId) {
-        memberRepository.delete(Member.builder().id(userId).build());
-    }
-
-
 }

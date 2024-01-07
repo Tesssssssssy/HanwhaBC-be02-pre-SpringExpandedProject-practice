@@ -27,7 +27,6 @@ public class JwtFilter extends OncePerRequestFilter {
         // Header의 AUTHORIZATION에 담겨져 온 Bearer token 값을 header 변수에 저장.
         String header = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-
         /*
             만약 header 변수에 저장한 토큰 값이 null이 아니고 "Bearer "로 시작하면
             저장한 token을 parsing (Bearer 제거) 후 token 변수에 저장
@@ -47,7 +46,7 @@ public class JwtFilter extends OncePerRequestFilter {
             입력받은 token과 미리 설정한 secretkey를 이용해
             JWT token에 넣은 email, memberId, memberNickname 값 추출 후 저장.
         */
-        String email = JwtUtils.getMemberEmail(token, secretKey);
+        String username = JwtUtils.getUsername(token, secretKey);
         Long memberId = JwtUtils.getMemberId(token, secretKey);
         String memberNickname = JwtUtils.getMemberNickname(token, secretKey);
 
@@ -66,7 +65,7 @@ public class JwtFilter extends OncePerRequestFilter {
             Member를 담은 Authentication 생성
         */
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                Member.builder().idx(memberId).email(email).build(), null,
+                Member.builder().id(memberId).email(username).nickname(memberNickname).build(), null,
                 null
         );
 

@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.security.Key;
 import java.util.Date;
@@ -27,7 +28,7 @@ public class JwtUtils {
                 .setClaims(claims)
                 //.setSubject(username)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + (1 * 60 * 60 * 1000) * 1000))
+                .setExpiration(new Date((System.currentTimeMillis() + 3600000)*1000))
                 //.signWith(Keys.secretKeyFor(SignatureAlgorithm.HS512))
                 // .signWith(SignatureAlgorithm.ES512, secretKey.getBytes())
                  .signWith(getSignKey(key), SignatureAlgorithm.HS256)
@@ -43,7 +44,7 @@ public class JwtUtils {
 
     // 유저에게 발급된 jwt token이 유효한지 여부를 확인하는 메소드
     public static Boolean validate(String token, String key) {
-        String usernameByToken = getMemberEmail(token, key);
+        String usernameByToken = getUsername(token, key);
 
         Date expireTime = extractAllClaims(token, key).getExpiration();
         Boolean result = expireTime.before(new Date(System.currentTimeMillis()));
@@ -52,8 +53,8 @@ public class JwtUtils {
         return !result;
     }
 
-    public static String getMemberEmail(String token, String key) {
-        return extractAllClaims(token, key).get("email", String.class);
+    public static String getUsername(String token, String key) {
+        return extractAllClaims(token, key).get("username", String.class);
 
     }
 

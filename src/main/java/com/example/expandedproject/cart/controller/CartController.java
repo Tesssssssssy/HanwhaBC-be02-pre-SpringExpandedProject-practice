@@ -19,21 +19,20 @@ import org.springframework.web.bind.annotation.*;
 public class CartController {
     private final CartService cartService;
 
-    @RequestMapping(method = RequestMethod.POST, value = "/in")
-    public ResponseEntity in(@AuthenticationPrincipal Member member, @RequestBody CartCreateReq cartCreateReq) {
-        cartService.create(member, cartCreateReq);
-        return ResponseEntity.ok().body("ok");
+    @PostMapping("/in")
+    public ResponseEntity createCart(@AuthenticationPrincipal Member member, @RequestBody CartCreateReq cartCreateReq) {
+        cartService.createCart(member, cartCreateReq);
+        return ResponseEntity.ok().body("create cart success");
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/list")
-    public ResponseEntity list(@AuthenticationPrincipal Member member) {
-
-        return ResponseEntity.ok().body(cartService.list(member));
+    @GetMapping("/list")
+    public ResponseEntity findCartList(@AuthenticationPrincipal Member member) {
+        return ResponseEntity.ok().body(cartService.findCartList(member));
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/cancel/{idx}")
-    public ResponseEntity in(@AuthenticationPrincipal Member member,@PathVariable Long idx) {
-        cartService.remove(member, idx);
-        return ResponseEntity.ok().body("ok");
+    @GetMapping("/cancel/{idx}")
+    public ResponseEntity deleteCartById(@AuthenticationPrincipal Member member,@PathVariable Long idx) {
+        cartService.deleteCartById(member, idx);
+        return ResponseEntity.ok().body("delete cart success");
     }
 }

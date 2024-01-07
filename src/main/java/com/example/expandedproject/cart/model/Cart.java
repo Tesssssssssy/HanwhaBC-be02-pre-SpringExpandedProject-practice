@@ -12,11 +12,11 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Setter
 @Builder
+@Table(name = "Cart")
 public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-
 
     @ManyToOne
     @JoinColumn(name = "Member_id")

@@ -26,7 +26,6 @@ public class SecurityConfig {
         cycle 문제가 발생했다.
     */
 
-
     @Value("${jwt.secret-key}")
     private String secretKey;
 
@@ -46,15 +45,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) {
         try {
-            http
-                    .httpBasic().disable()
-                    .csrf().disable()
+            http.csrf().disable()
                     .authorizeRequests()
-                    .antMatchers("/member/*").permitAll()
-                    .antMatchers("/product/*").permitAll()
-                    .antMatchers("/swagger-ui/*").permitAll()
+                    .antMatchers("/**").permitAll()
                     .anyRequest().authenticated();
-
 
             // http.addFilterBefore(new JwtFilter(memberService, secretKey), UsernamePasswordAuthenticationFilter.class);
             http.addFilterBefore(new JwtFilter(secretKey), UsernamePasswordAuthenticationFilter.class);

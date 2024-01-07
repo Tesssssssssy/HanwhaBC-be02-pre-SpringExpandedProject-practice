@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Builder
 @Data
-public class PutProductUpdateReq {
+public class PatchProductUpdateReq {
     Long id;
     String name;
     Integer price;

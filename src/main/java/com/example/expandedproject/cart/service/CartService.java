@@ -19,7 +19,7 @@ import java.util.List;
 public class CartService {
     private final CartRepository cartRepository;
 
-    public void create(Member member, CartCreateReq cartCreateReq){
+    public void createCart(Member member, CartCreateReq cartCreateReq){
         cartRepository.save(
                 Cart.builder()
                         .member(member)
@@ -28,7 +28,7 @@ public class CartService {
                         .build());
     }
 
-    public CartListRes list(Member member){
+    public CartListRes findCartList(Member member){
         List<Cart> cartList = cartRepository.findAllByMember(member);
 
 
@@ -43,7 +43,7 @@ public class CartService {
                     .brandIdx(cart.getMember().getId())
                     .deliveryType(cart.getProduct().getDeliveryType())
                     .price(cart.getProduct().getPrice())
-                    .filename(cart.getProduct().getImageList().get(0).getImg())
+                    .filename(cart.getProduct().getImageList().get(0).getFilename())
                     .build();
             cartDtos.add(dto);
         }
@@ -59,7 +59,7 @@ public class CartService {
     }
 
     @Transactional
-    public void remove(Member member, Long idx){
+    public void deleteCartById(Member member, Long idx){
         cartRepository.deleteByIdAndMember(idx, member);
     }
 }

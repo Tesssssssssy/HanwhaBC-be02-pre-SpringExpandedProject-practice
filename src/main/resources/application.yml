@@ -55,3 +55,7 @@ cloud:
       auto: false
     stack:
       auto: false
+
+message:
+  email:
+    from: ${MSG_EMAIL_FROM}

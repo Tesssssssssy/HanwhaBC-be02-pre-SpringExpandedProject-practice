@@ -5,7 +5,7 @@ import com.example.expandedproject.image.service.ImageService;
 import com.example.expandedproject.member.model.Member;
 import com.example.expandedproject.product.model.Product;
 import com.example.expandedproject.product.model.dto.request.PostProductReq;
-import com.example.expandedproject.product.model.dto.request.PutProductUpdateReq;
+import com.example.expandedproject.product.model.dto.request.PatchProductUpdateReq;
 import com.example.expandedproject.product.model.dto.response.*;
 import com.example.expandedproject.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -56,7 +56,7 @@ public class ProductService {
 
             String filenames = "";
             for (Image image : images) {
-                String filename = image.getImg();
+                String filename = image.getFilename();
                 filenames += filename + ",";
             }
             filenames = filenames.substring(0, filenames.length() - 1);
@@ -77,7 +77,6 @@ public class ProductService {
             productReadResList.add(productReadRes);
         }
 
-
         return ProductListRes.builder()
                 .code(1000)
                 .message("요청 성공.")
@@ -97,11 +96,10 @@ public class ProductService {
 
             String filenames = "";
             for (Image image : images) {
-                String filename = image.getImg();
+                String filename = image.getFilename();
                 filenames += filename + ",";
             }
             filenames = filenames.substring(0, filenames.length() - 1);
-
 
             GetFindProductRes getFindProductRes = GetFindProductRes.builder()
                     .idx(product.getId())
@@ -127,7 +125,7 @@ public class ProductService {
         return null;
     }
 
-    public void update(PutProductUpdateReq req) {
+    public void update(PatchProductUpdateReq req) {
         Optional<Product> result = productRepository.findById(req.getId());
         if (result.isPresent()) {
             Product product = result.get();
@@ -141,6 +139,5 @@ public class ProductService {
     public void delete(Long id) {
         productRepository.delete(Product.builder().id(id).build());
     }
-
 
 }

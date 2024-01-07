@@ -1,6 +1,7 @@
 package com.example.expandedproject.product.controller;
 
 import com.example.expandedproject.member.model.Member;
+import com.example.expandedproject.product.model.dto.request.PatchProductUpdateReq;
 import com.example.expandedproject.product.model.dto.request.PostProductReq;
 import com.example.expandedproject.product.model.dto.response.PostProductCreateRes;
 import com.example.expandedproject.product.service.ProductService;
@@ -13,10 +14,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
-@Tag(name="Product", description = "Product CRUD")
-@Api(tags = "Product")
 @RestController
 @CrossOrigin("*")
 @Slf4j
@@ -26,13 +26,30 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping("/create")
-    public ResponseEntity createProduct(@AuthenticationPrincipal Member member, @RequestPart PostProductReq req, @RequestPart MultipartFile[] uploadFiles) {
-        PostProductCreateRes response = productService.createProduct(member, req, uploadFiles);
+    public ResponseEntity createProduct(@AuthenticationPrincipal Member member, @RequestPart PostProductReq postProductReq, @RequestPart MultipartFile[] uploadFiles) {
+        PostProductCreateRes response = productService.createProduct(member, postProductReq, uploadFiles);
         return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("/list")
-    public ResponseEntity findProductList() {
+    public ResponseEntity findProductList(HttpServletRequest request) {
         return ResponseEntity.ok().body(productService.findProductList());
+    }
+
+    @GetMapping("/{idx}")
+    public ResponseEntity findProductById(@PathVariable Long idx) {
+        return ResponseEntity.ok().body(productService.findProductById(idx));
+    }
+
+    @PatchMapping( "/update")
+    public ResponseEntity update(PatchProductUpdateReq productUpdateReq) {
+        productService.update(productUpdateReq);
+        return ResponseEntity.ok().body("수정");
+    }
+
+    @DeleteMapping( "/delete")
+    public ResponseEntity delete(Long id) {
+        productService.delete(id);
+        return ResponseEntity.ok().body("삭제");
     }
 }

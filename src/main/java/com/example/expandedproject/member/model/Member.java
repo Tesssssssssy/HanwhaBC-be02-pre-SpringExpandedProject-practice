@@ -1,5 +1,6 @@
 package com.example.expandedproject.member.model;
 
+import com.example.expandedproject.product.model.Product;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -14,6 +15,7 @@ import java.util.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Table(name = "Member")
 public class Member implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,6 +40,9 @@ public class Member implements UserDetails {
     private String authority;
 
     private Boolean status;
+
+    @OneToMany(mappedBy = "brandIdx")
+    private List<Product> memberList = new ArrayList<>();
 
 
     @Override
