@@ -20,8 +20,7 @@ public class CartService {
     private final CartRepository cartRepository;
 
     public void createCart(Member member, CartCreateReq cartCreateReq){
-        cartRepository.save(
-                Cart.builder()
+        cartRepository.save(Cart.builder()
                         .member(member)
                         .product(Product.builder().id(cartCreateReq.getProductIdx()).build())
                         .amount(cartCreateReq.getAmount())
@@ -30,7 +29,6 @@ public class CartService {
 
     public CartListRes findCartList(Member member){
         List<Cart> cartList = cartRepository.findAllByMember(member);
-
 
         List<CartDto> cartDtos = new ArrayList<>();
         for (Cart cart : cartList) {

@@ -27,12 +27,17 @@ public class ProductController {
 
     @PostMapping("/create")
     public ResponseEntity createProduct(@AuthenticationPrincipal Member member, @RequestPart PostProductReq postProductReq, @RequestPart MultipartFile[] uploadFiles) {
+        /*
+            이 코드는 좋지 않다. 상품 등록을 하기 위해선 member id가 필요한데
+            프론트엔드에서 쉽게 받아올 수 있지만 프론트엔드 코드를 수정할 수 없는 상태이고
+            @AuthenticationPrincipal annotation으로 Member 객체 자체를 param으로 했기 떄문이다.
+        */
         PostProductCreateRes response = productService.createProduct(member, postProductReq, uploadFiles);
         return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("/list")
-    public ResponseEntity findProductList(HttpServletRequest request) {
+    public ResponseEntity findProductList() {
         return ResponseEntity.ok().body(productService.findProductList());
     }
 

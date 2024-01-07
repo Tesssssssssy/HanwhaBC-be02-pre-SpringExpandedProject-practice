@@ -22,6 +22,8 @@ public class ImageService {
 
             Image img = Image.builder()
                     .filename(savePath)
+                    // AWS S3에 저장되는 파일 경로를 filename 변수에 저장.
+                    // 추후 이미지들을 불러올 때 사용.
                     .product(Product.builder().id(id).build())
                     .build();
 

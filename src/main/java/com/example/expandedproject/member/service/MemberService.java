@@ -6,10 +6,7 @@ import com.example.expandedproject.member.model.Member;
 import com.example.expandedproject.member.model.request.PostMemberLoginReq;
 import com.example.expandedproject.member.model.request.PostSignUpMemberReq;
 import com.example.expandedproject.member.model.request.PutUpdateMemberReq;
-import com.example.expandedproject.member.model.response.GetFindMemberRes;
-import com.example.expandedproject.member.model.response.MemberSignUpResult;
-import com.example.expandedproject.member.model.response.PostSignUpMemberDtoRes;
-import com.example.expandedproject.member.model.response.PutUpdateMemberDtoRes;
+import com.example.expandedproject.member.model.response.*;
 import com.example.expandedproject.member.repository.MemberRepository;
 import com.example.expandedproject.utils.JwtUtils;
 import lombok.RequiredArgsConstructor;
@@ -50,9 +47,11 @@ public class MemberService{
                     .nickname(request.getNickname())
                     .authority("ROLE_USER")
                     .status(false)
+                    // email 인증 과정을 거치지 않았기 때문에 default 값 false.
                     .build();
 
             member = memberRepository.save(member);
+            // 입력받은 dto를 이용해 DB에 우선 저장.
 
             /*
             String token = UUID.randomUUID().toString();
@@ -62,7 +61,13 @@ public class MemberService{
             */
 
             sendEmail(member.getId(), member.getEmail(), member.getNickname());
+            /*
+                DB에 저장 후 member의 id, email, nickname을 param으로 해서
+                이메일 인증 메소드 호출.
+            */
 
+
+            // email 인증 과정을 거쳐서 true가 되었을 때 최종 반환 response dto build.
             if (member.getStatus()) {
                 MemberSignUpResult res = MemberSignUpResult.builder()
                         .idx(member.getId())
@@ -82,14 +87,17 @@ public class MemberService{
                 return response;
             }
             throw new MemberException(ErrorCode.UNAUTHORIZED_EMAIL);
+            // email 인증을 하지 않았을 때 예외 처리.
         }
         throw new MemberException(ErrorCode.DUPLICATED_MEMBER);
+        // 회원 가입 시 입력 받은 email로 회원 가입한 member가 이미 db에 존재할 때 예외 처리.
     }
 
 
     // 이메일 인증 로직을 따로 메소드로 분리
     public void sendEmail(Long id, String email, String nickname) {
         String token = UUID.randomUUID().toString();
+        // Spring에서 제공하는 UUID 라이브러리 호출해 random token 생성.
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(originEmail);
@@ -102,6 +110,7 @@ public class MemberService{
                 + "&jwt=" + JwtUtils.generateAccessToken(email, nickname, id, secretKey)
         );
         emailSender.send(message);
+        // message 생성 후 emailSender를 이용해 email 인증을 위한 email 전송.
 
         emailVerifyService.create(email, token);
     }
@@ -115,6 +124,8 @@ public class MemberService{
                     .password(passwordEncoder.encode(request.getPassword()))
                     .nickname(request.getNickname())
                     .authority("ROLE_SELLER")
+                    // 판매자 회원 가입이므로 default 권한 -> "ROLE_SELLER"
+                    // 추후 Product 등록 시 ROLE_SELLER 권한을 가진 member만 접근 및 product 등록 가능.
                     .status(false)
                     .build();
 
@@ -124,8 +135,6 @@ public class MemberService{
                 MemberSignUpResult res = MemberSignUpResult.builder()
                         .idx(member.getId())
                         .status(member.getStatus())
-                        // 해당 member의 status를 받아서 반환.
-                        // email 관련 인증을 마쳤다면 true일 것.
                         .build();
 
                 PostSignUpMemberDtoRes response = PostSignUpMemberDtoRes.builder()
@@ -145,16 +154,46 @@ public class MemberService{
 
 
     // Member Login 메소드
-    public String login(PostMemberLoginReq req) {
+    public PostMemberLoginRes login(PostMemberLoginReq req) {
+        /*
+            client로부터 request가 왔을 때 Authentication Filter가 이 요청을 가로채고
+            UsernamePasswordAuthenticationToken을 통해 Authentication을 만들어
+            Authentication Manager에게 authentication을 전달한다.
+            그리고 AuthenticationManager는 AuthenticationProvider에게
+            인증 관련 처리를 위임한다.
+            그리고 AuthenticationProvider는 UserDetailsService를 통해
+            DB에서 해당하는 유저가 있는지 찾고 비밀번호 일치 여부 등을 확인 후
+            다시 Authentication을 만들어 AuthenticationManager에게 authentication을 전달한다.
+            그리고 AuthenticationManager는 이 authentication을 AuthenticationFilter에게
+            authentication을 전달하고
+            AuthenticationFilter는 SecurityContextHoler에게 이를 전달하고
+            SecurityContextHoler의 SecurityContext 안에 authentication을 저장한다.
+        */
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(req.getUsername(), req.getPassword()));
 
+
         if (authentication.isAuthenticated()) {
+            /*
+                authentication 인증 과정을 거쳐 최종적으로 인증이 되면
+                보호된 authentication resource에 접근할 수 있는 principal을 이용해
+                member의 id, email, nickname을 받아 오고
+                받아온 id, email, nickname을 이용해 jwt token 생성.
+            */
             Long id = ((Member) authentication.getPrincipal()).getId();
+            String email = ((Member) authentication.getPrincipal()).getEmail();
             String nickname = ((Member) authentication.getPrincipal()).getNickname();
-            return JwtUtils.generateAccessToken(req.getUsername(), nickname, id, secretKey);
+
+            String jwt = JwtUtils.generateAccessToken(email, nickname, id, secretKey);
+
+            PostMemberLoginRes loginRes = PostMemberLoginRes.builder()
+                    .token(jwt)
+                    .build();
+
+            return loginRes;
         }
-        return null;
+        throw new MemberException(ErrorCode.AUTHENTICATION_FAIL);
+
 
         /*
         Member m = (Member) userDetailsService.loadUserByUsername(postMemberLoginReq.getUsername());
@@ -175,6 +214,7 @@ public class MemberService{
             member.setStatus(true);
             memberRepository.save(member);
         }
+        throw new MemberException(ErrorCode.MEMBER_EMPTY);
     }
 
 

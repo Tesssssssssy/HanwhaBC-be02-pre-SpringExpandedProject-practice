@@ -33,7 +33,6 @@ public class JwtFilter extends OncePerRequestFilter {
 
             아니면 다음 filterchain의 다음 filter로 위임.
         */
-
         String token;
         if (header != null && header.startsWith("Bearer ")) {
             token = header.split(" ")[1];
@@ -46,7 +45,7 @@ public class JwtFilter extends OncePerRequestFilter {
             입력받은 token과 미리 설정한 secretkey를 이용해
             JWT token에 넣은 email, memberId, memberNickname 값 추출 후 저장.
         */
-        String username = JwtUtils.getUsername(token, secretKey);
+        String email = JwtUtils.getMemberEmail(token, secretKey);
         Long memberId = JwtUtils.getMemberId(token, secretKey);
         String memberNickname = JwtUtils.getMemberNickname(token, secretKey);
 
@@ -65,7 +64,7 @@ public class JwtFilter extends OncePerRequestFilter {
             Member를 담은 Authentication 생성
         */
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                Member.builder().id(memberId).email(username).nickname(memberNickname).build(), null,
+                Member.builder().id(memberId).email(email).nickname(memberNickname).build(), null,
                 null
         );
 

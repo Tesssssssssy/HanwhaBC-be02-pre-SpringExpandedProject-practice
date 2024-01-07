@@ -29,11 +29,12 @@ public class MemberController {
     private final EmailVerifyService emailVerifyService;
     // private final JavaMailSender javaMailSender;
     // private final AuthenticationManager authenticationManager;
-    // 위 의존성 주입받았던 객체들은 모두 service 단으로 이동해서 구현되었음.
+    // 위 의존성 주입받았던 객체들은 모두 service 단으로 이동해서 구현.
 
 
     /**
      *  일반 유저 회원 가입
+     *  -> "ROLE_USER"로 default 권한 부여
      */
     @PostMapping("/signup")
     public ResponseEntity signUpMember(@RequestBody PostSignUpMemberReq req) {
@@ -44,7 +45,7 @@ public class MemberController {
         PostSignUpMemberDtoRes response = memberService.signUpMember(req);
 
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("ewoo9762@gmail.com");
+        message.setFrom("보내는 이메일 주소");
         message.setTo(req.getEmail());
         message.setSentDate(new Date(System.currentTimeMillis()));
         message.setSubject("[심마켓] 이메일 인증");
@@ -61,6 +62,7 @@ public class MemberController {
 
     /**
      *  판매자 회원 가입
+     *  -> "ROLE_SELLER"로 default 권한 부여
      */
     @Operation(summary = "Member Seller 회원가입",
             description = "판매자 회원가입을 하는 API입니다.")
@@ -79,11 +81,7 @@ public class MemberController {
      */
     @PostMapping( "/authenticate")
     public ResponseEntity login(@RequestBody PostMemberLoginReq postMemberLoginReq) {
-        PostMemberLoginRes res = PostMemberLoginRes.builder()
-                .token(memberService.login(postMemberLoginReq))
-                .build();
-
-        return ResponseEntity.ok().body(res);
+        return ResponseEntity.ok().body(memberService.login(postMemberLoginReq));
     }
 
 

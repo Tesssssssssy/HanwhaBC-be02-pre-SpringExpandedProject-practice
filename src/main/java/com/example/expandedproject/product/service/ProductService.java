@@ -1,5 +1,7 @@
 package com.example.expandedproject.product.service;
 
+import com.example.expandedproject.exception.ErrorCode;
+import com.example.expandedproject.exception.entityException.ProductException;
 import com.example.expandedproject.image.model.Image;
 import com.example.expandedproject.image.service.ImageService;
 import com.example.expandedproject.member.model.Member;
@@ -35,6 +37,7 @@ public class ProductService {
         product = productRepository.save(product);
 
         imageService.createImage(product.getId(), uploadFiles);
+        // 이미지 관련 로직은 ImageService에 구현되어 있으므로 imageService의 createImage 메소드 호출.
 
         PostProductCreateRes response = PostProductCreateRes.builder()
                 .code(1000)
@@ -60,7 +63,9 @@ public class ProductService {
                 filenames += filename + ",";
             }
             filenames = filenames.substring(0, filenames.length() - 1);
-
+            // Image의 filename은 AWS S3에 저장된 경로가 저장되어 있기 때문에
+            // 여러 이미지의 경우 filename들을 parsing하기 위한 작업.
+            // 프론트엔드에 사진을 띄워주기 위한 작업. (프론트엔드 코드 이상함으로 인한 불편한 코드)
 
             GetFindProductRes productReadRes = GetFindProductRes.builder()
                     .idx(product.getId())
@@ -122,7 +127,7 @@ public class ProductService {
                     .result(getFindProductRes)
                     .build();
         }
-        return null;
+        throw new ProductException(ErrorCode.PRODUCT_EMPTY);
     }
 
     public void update(PatchProductUpdateReq req) {
@@ -134,6 +139,7 @@ public class ProductService {
 
             productRepository.save(product);
         }
+        throw new ProductException(ErrorCode.PRODUCT_EMPTY);
     }
 
     public void delete(Long id) {
