@@ -3,7 +3,6 @@ package com.example.expandedproject.product.model;
 import com.example.expandedproject.image.model.Image;
 import com.example.expandedproject.member.model.Member;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -34,10 +33,9 @@ public class Product {
     private String deliveryType;
     private String isTodayDeal;
 
-    @Column(length = 200, nullable = false, unique = true)
+    @Column(length = 200, unique = true)
     private String contents;
 
-    @Version
     private Integer likeCount;
 
     @ManyToOne(fetch = FetchType.LAZY)

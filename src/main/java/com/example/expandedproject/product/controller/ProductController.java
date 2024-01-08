@@ -38,8 +38,8 @@ public class ProductController {
 
     @GetMapping("/list")
     public ResponseEntity findProductList(Integer page, Integer size) {
-        // return ResponseEntity.ok().body(productService.findProductList());
-         return ResponseEntity.ok().body(productService.findProductListPaging(page, size));
+        return ResponseEntity.ok().body(productService.findProductList());
+        // return ResponseEntity.ok().body(productService.findProductListPaging(page, size));
     }
 
     @GetMapping("/{idx}")

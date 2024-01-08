@@ -17,7 +17,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.transaction.Transactional;
 import java.util.*;
 
 @Service
@@ -26,7 +25,6 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ImageService imageService;
 
-    @Transactional
     public PostProductCreateRes createProduct(Member member, PostProductReq req, MultipartFile[] uploadFiles) {
         Product product = Product.builder()
                 .name(req.getName())
