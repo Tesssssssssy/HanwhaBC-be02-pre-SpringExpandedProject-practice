@@ -3,6 +3,7 @@ package com.example.expandedproject.product.model;
 import com.example.expandedproject.image.model.Image;
 import com.example.expandedproject.member.model.Member;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -36,10 +37,18 @@ public class Product {
     @Column(length = 200, nullable = false, unique = true)
     private String contents;
 
+    @Version
+    private Integer likeCount;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Member_id")
     private Member brandIdx;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<Image> imageList = new ArrayList<>();
+
+
+    public void increaseLikeCount() {
+        this.likeCount += 1;
+    }
 }

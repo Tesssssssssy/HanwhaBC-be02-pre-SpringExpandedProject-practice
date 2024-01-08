@@ -11,9 +11,13 @@ import com.example.expandedproject.product.model.dto.request.PatchProductUpdateR
 import com.example.expandedproject.product.model.dto.response.*;
 import com.example.expandedproject.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.transaction.Transactional;
 import java.util.*;
 
 @Service
@@ -22,6 +26,7 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ImageService imageService;
 
+    @Transactional
     public PostProductCreateRes createProduct(Member member, PostProductReq req, MultipartFile[] uploadFiles) {
         Product product = Product.builder()
                 .name(req.getName())
@@ -32,6 +37,7 @@ public class ProductService {
                 .deliveryType("무료")
                 .isTodayDeal("n")
                 .contents(req.getContents())
+                .likeCount(0)
                 .build();
 
         product = productRepository.save(product);
@@ -50,8 +56,15 @@ public class ProductService {
         return response;
     }
 
-    public ProductListRes findProductList() {
-        List<Product> result = productRepository.findAll();
+
+    /**
+     *  Paging을 이용한 Product List 메소드
+     */
+    public ProductListRes findProductListPaging(Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        // 보통 1 페이지부터 시작하므로 1 빼고 시작한다.
+
+        Page<Product> result = productRepository.findListUsingPaging(pageable);
 
         List<GetFindProductRes> productReadResList = new ArrayList<>();
         for (Product product : result) {
@@ -70,6 +83,7 @@ public class ProductService {
             GetFindProductRes productReadRes = GetFindProductRes.builder()
                     .idx(product.getId())
                     .name(product.getName())
+                    .contents(product.getContents())
                     .price(product.getPrice())
                     .brandIdx(product.getBrandIdx().getId())
                     .categoryIdx(product.getCategoryIdx())
@@ -91,6 +105,50 @@ public class ProductService {
                 .build();
     }
 
+
+    public ProductListRes findProductList() {
+        List<Product> result = productRepository.findList();
+
+        List<GetFindProductRes> productReadResList = new ArrayList<>();
+        for (Product product : result) {
+            List<Image> images = product.getImageList();
+
+            String filenames = "";
+            for (Image image : images) {
+                String filename = image.getFilename();
+                filenames += filename + ",";
+            }
+            filenames = filenames.substring(0, filenames.length() - 1);
+            // Image의 filename은 AWS S3에 저장된 경로가 저장되어 있기 때문에
+            // 여러 이미지의 경우 filename들을 parsing하기 위한 작업.
+            // 프론트엔드에 사진을 띄워주기 위한 작업. (프론트엔드 코드 이상함으로 인한 불편한 코드)
+
+            GetFindProductRes productReadRes = GetFindProductRes.builder()
+                    .idx(product.getId())
+                    .name(product.getName())
+                    .contents(product.getContents())
+                    .price(product.getPrice())
+                    .brandIdx(product.getBrandIdx().getId())
+                    .categoryIdx(product.getCategoryIdx())
+                    .deliveryType(product.getDeliveryType())
+                    .salePrice(product.getSalePrice())
+                    .isTodayDeal(product.getIsTodayDeal())
+                    .like_check(false)
+                    .filename(filenames)
+                    .build();
+            productReadResList.add(productReadRes);
+        }
+
+        return ProductListRes.builder()
+                .code(1000)
+                .message("요청 성공.")
+                .success(true)
+                .isSuccess(true)
+                .result(productReadResList)
+                .build();
+    }
+
+
     public GetProductListRes findProductById(Long id) {
         Optional<Product> result = productRepository.findById(id);
 
@@ -110,6 +168,7 @@ public class ProductService {
                     .idx(product.getId())
                     .name(product.getName())
                     .price(product.getPrice())
+                    .contents(product.getContents())
                     .brandIdx(product.getBrandIdx().getId())
                     .categoryIdx(product.getCategoryIdx())
                     .deliveryType(product.getDeliveryType())

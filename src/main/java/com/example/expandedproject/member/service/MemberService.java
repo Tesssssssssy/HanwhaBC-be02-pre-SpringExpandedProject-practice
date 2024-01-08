@@ -149,7 +149,7 @@ public class MemberService{
             }
             throw new MemberException(ErrorCode.UNAUTHORIZED_EMAIL);
         }
-        throw new MemberException(ErrorCode.DUPLICATED_MEMBER);
+        return null;
     }
 
 
@@ -214,7 +214,6 @@ public class MemberService{
             member.setStatus(true);
             memberRepository.save(member);
         }
-        throw new MemberException(ErrorCode.MEMBER_EMPTY);
     }
 
 
